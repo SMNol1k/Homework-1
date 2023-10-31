@@ -27,12 +27,10 @@ class Student:
     def __str__(self):
         return (f'Имя: {self.name}\n'
                 f'Фамилия: {self.surname}\n'
-                f'Средняя оценка: {avg_rating(self.grades)}\n'
+                f'Средняя оценка за домашнее задание: {avg_rating(self.grades)}\n'
                 f'Курсы в процессе изучения: {", ".join(self.courses_in_progress)}\n'
                 f'Завершенные курсы: {", ".join(self.finished_courses)}\n')
-                
 
-        
 class Mentor:
     def __init__(self, name, surname):
         self.name = name
@@ -50,7 +48,7 @@ class Lecturer(Mentor):
     def __str__(self):
         return (f'Имя: {self.name}\n'
                 f'Фамилия: {self.surname}\n'
-                f'Средняя оценка: {avg_rating(self.grades)}\n')
+                f'Средняя оценка за лекции: {avg_rating(self.grades)}\n')
 
 class Reviewer(Mentor):
 
@@ -66,33 +64,103 @@ class Reviewer(Mentor):
     def __str__(self):
         return (f'Имя: {self.name}\n'
                 f'Фамилия: {self.surname}\n')    
-     
-best_student = Student('Ruoy', 'Eman', 'your_gender')
-best_student.courses_in_progress += ['Python']
-best_student.courses_in_progress += ['Git']
-best_student.finished_courses += ['Введение в программирование']
 
-best_lectur = Lecturer('John', 'Smith')
-best_lectur.courses_attached += ['Python']
 
-cool_mentor = Reviewer('Some', 'Buddy')
-cool_mentor.courses_attached += ['Python']
+student_1 = Student('Ruoy', 'Eman', 'male')
+student_1.courses_in_progress += ['Python']
+student_1.courses_in_progress += ['Git']
+student_1.finished_courses += ['Введение в программирование']
 
-cool_mentor.rate_hw(best_student, 'Python', 10)
-cool_mentor.rate_hw(best_student, 'Python', 9)
-cool_mentor.rate_hw(best_student, 'Python', 8)
+student_2 = Student('Sam', 'Winchester', 'male')
+student_2.courses_in_progress += ['Python']
+student_2.courses_in_progress += ['Git']
+student_2.finished_courses += ['Введение в программирование']
+
+lectur_1 = Lecturer('John', 'Smith')
+lectur_1.courses_attached += ['Python']
+
+lectur_2 = Lecturer('James', 'Smith')
+lectur_2.courses_attached += ['Git']
+
+mentor_1 = Reviewer('Some', 'Buddy')
+mentor_1.courses_attached += ['Python']
+
+mentor_2 = Reviewer('Second', 'Buddy')
+mentor_2.courses_attached += ['Git']
+
+
+mentor_1.rate_hw(student_1, 'Python', 10)
+mentor_1.rate_hw(student_1, 'Python', 9)
+mentor_1.rate_hw(student_1, 'Python', 8)
+mentor_1.rate_hw(student_1, 'Git', 8)
+mentor_1.rate_hw(student_1, 'Git', 9)
+mentor_1.rate_hw(student_1, 'Git', 8)
+
+mentor_2.rate_hw(student_2, 'Git', 8)
+mentor_2.rate_hw(student_2, 'Git', 9)
+mentor_2.rate_hw(student_2, 'Git', 8)
+mentor_2.rate_hw(student_2, 'Python', 9)
+mentor_2.rate_hw(student_2, 'Python', 9)
+mentor_2.rate_hw(student_2, 'Python', 8)
  
-best_student.rate_lecturs(best_lectur, 'Python', 9)
-best_student.rate_lecturs(best_lectur, 'Python', 8)
-best_student.rate_lecturs(best_lectur, 'Python', 7)
+student_1.rate_lecturs(lectur_1, 'Python', 9)
+student_1.rate_lecturs(lectur_1, 'Python', 8)
+student_1.rate_lecturs(lectur_1, 'Python', 7)
 
-if avg_rating(best_student.grades) > avg_rating(best_lectur.grades):
-    print("У студентов оценки лучше\n")
+student_2.rate_lecturs(lectur_2, 'Git', 9)
+student_2.rate_lecturs(lectur_2, 'Git', 8)
+student_2.rate_lecturs(lectur_2, 'Git', 8)
+
+if avg_rating(student_1.grades) > avg_rating(student_2.grades):
+    print(f'У студента {student_1.name} {student_1.surname} оценки лучше\n')
 else:
-    print("У лекторов оценки лучше\n")
+    print(f'У студента {student_2.name} {student_2.surname} оценки лучше\n')
 
-print(best_student.__str__())
-print(best_lectur.__str__())
-print(cool_mentor.__str__())
-print(best_student.grades)
-print(best_lectur.grades)
+if avg_rating(lectur_1.grades) > avg_rating(lectur_2.grades):
+    print(f'У лектора {lectur_1.name} {lectur_1.surname} средняя оценка за лекции выше\n')
+else:
+    print(f'У лектора {lectur_2.name} {lectur_2.surname} средняя оценка за лекции выше\n')
+
+print(student_1.__str__())
+print(lectur_1.__str__())
+print(mentor_1.__str__())
+print(student_1.grades)
+print(lectur_1.grades)
+
+print(student_2.__str__())
+print(lectur_2.__str__())
+print(mentor_2.__str__())
+print(student_2.grades)
+print(lectur_2.grades)
+
+
+def average_grade_students(students, course):
+    grades_count = 0
+    grades_sum = 0
+    for student in students:
+        if course in student.grades:
+            grades_count += len(student.grades[course])
+            grades_sum += sum(student.grades[course])
+    return grades_sum / grades_count
+
+def average_grade_lecturers(lecturers, course):
+    grades_sum = 0
+    grades_count = 0
+    for lecturer in lecturers:
+        if course in lecturer.courses_attached:
+            grades_sum += sum(lecturer.grades[course])
+            grades_count += len(lecturer.grades[course])
+    return grades_sum / grades_count
+
+
+course = 'Python'
+print(f"Средняя оценка за лекции по курсу {course}: {average_grade_lecturers([lectur_1, lectur_2], course)}")
+
+course = 'Git'
+print(f"Средняя оценка за лекции по курсу {course}: {average_grade_lecturers([lectur_1, lectur_2], course)}")
+
+course = 'Python'
+print(f"Средняя оценка за домашние задания по курсу {course}: {average_grade_students([student_1, student_2], course)}")
+
+course = 'Git'
+print(f"Средняя оценка за домашние задания по курсу {course}: {average_grade_students([student_1, student_2], course)}")
