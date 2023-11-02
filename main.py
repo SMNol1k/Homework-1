@@ -30,6 +30,35 @@ class Student:
                 f'Средняя оценка за домашнее задание: {avg_rating(self.grades)}\n'
                 f'Курсы в процессе изучения: {", ".join(self.courses_in_progress)}\n'
                 f'Завершенные курсы: {", ".join(self.finished_courses)}\n')
+    
+    def grades_average(self):
+        grades_count = 0
+        grades_sum = 0
+        for grade in self.grades:
+            grades_count += len(self.grades[grade])
+            grades_sum += sum(self.grades[grade])
+        if grades_count > 0:
+            return grades_sum / grades_count
+        else:
+            return 0
+
+    def __gt__(self, other):
+        if not isinstance(other, Student):
+            print('Ошибка')
+            return
+        return self.grades_average() > other.grades_average()
+
+    def __lt__(self, other):
+        if not isinstance(other, Student):
+            print('Ошибка')
+            return
+        return self.grades_average() < other.grades_average()
+    
+    def __eq__(self, other):
+        if not isinstance(other, Student):
+            print('Ошибка')
+            return
+        return self.grades_average() == other.grades_average()
 
 class Mentor:
     def __init__(self, name, surname):
@@ -49,6 +78,33 @@ class Lecturer(Mentor):
         return (f'Имя: {self.name}\n'
                 f'Фамилия: {self.surname}\n'
                 f'Средняя оценка за лекции: {avg_rating(self.grades)}\n')
+    
+    def grades_average_(self):
+        grades_count = 0
+        grades_sum = 0
+        for grade in self.grades:
+            grades_count += len(self.grades[grade])
+            grades_sum += sum(self.grades[grade])
+        if grades_count > 0:
+            return grades_sum / grades_count
+        else:
+            return 0
+        
+    def __gt__(self, other):
+        if not isinstance(other, Lecturer):
+            print('Ошибка')
+            return
+        return self.grades_average_() > other.grades_average_()
+    def __lt__(self, other):
+        if not isinstance(other, Lecturer):
+            print('Ошибка')
+            return
+        return self.grades_average_() < other.grades_average_()
+    def __eq__(self, other):
+        if not isinstance(other, Lecturer):
+            print('Ошибка')
+            return
+        return self.grades_average_() == other.grades_average_()       
 
 class Reviewer(Mentor):
 
@@ -133,7 +189,6 @@ print(mentor_2.__str__())
 print(student_2.grades)
 print(lectur_2.grades)
 
-
 def average_grade_students(students, course):
     grades_count = 0
     grades_sum = 0
@@ -152,7 +207,6 @@ def average_grade_lecturers(lecturers, course):
             grades_count += len(lecturer.grades[course])
     return grades_sum / grades_count
 
-
 course = 'Python'
 print(f"Средняя оценка за лекции по курсу {course}: {average_grade_lecturers([lectur_1, lectur_2], course)}")
 
@@ -164,3 +218,17 @@ print(f"Средняя оценка за домашние задания по к
 
 course = 'Git'
 print(f"Средняя оценка за домашние задания по курсу {course}: {average_grade_students([student_1, student_2], course)}")
+
+if student_1 > student_2:
+    print(f'Средняя оценка {student_1.name} {student_1.surname} больше, чем средняя оценка {student_2.name} {student_2.surname}')
+elif student_1 < student_2:
+    print(f'Средняя оценка {student_1.name} {student_1.surname} меньше, чем средняя оценка {student_2.name} {student_2.surname}')
+else:
+    print(f'Средняя оценка {student_1.name} {student_1.surname}  равна средней оценке {student_2.name} {student_2.surname}')
+
+if lectur_1 > lectur_2:
+    print(f'Средняя оценка {lectur_1.name} {lectur_1.surname} больше, чем средняя оценка {lectur_2.name} {lectur_2.surname}')
+elif lectur_1 < lectur_2:
+    print(f'Средняя оценка {lectur_1.name} {lectur_1.surname} меньше, чем средняя оценка {lectur_2.name} {lectur_2.surname}')
+else:
+    print(f'Средняя оценка {lectur_1.name} {lectur_1.surname}  равна средней оценке {lectur_2.name} {lectur_2.surname}')
